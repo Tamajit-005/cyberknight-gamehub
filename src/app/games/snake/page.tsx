@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import ChessBoard from "./ui/ChessBoard";
+import SnakeBoard from "./SnakeBoard";
 import { motion, Variants } from "framer-motion";
 
 const pageEntranceVariants: Variants = {
@@ -16,24 +16,25 @@ const pageEntranceVariants: Variants = {
   },
 };
 
-export default function ChessPageClient() {
+export default function SnakePage() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <main className="min-h-screen bg-linear-to-br from-slate-900 to-gray-950 text-white flex flex-col items-center">
+    <main className="min-h-screen bg-slate-950 text-white flex flex-col items-center py-10">
       <motion.div
-        className="w-full flex flex-col items-center max-w-5xl"
+        className="w-full flex flex-col items-center max-w-lg"
         variants={pageEntranceVariants}
         initial="hidden"
         animate="visible"
       >
-        <header className="container text-center mt-8">
+        <header className="text-center mb-6">
           <h1 className="text-4xl font-bold tracking-tight">
-            CyberKnight<span className="text-green-400"> Chess</span>
+            CyberKnight<span className="text-orange-400"> Viper Loop</span>
           </h1>
           <p className="text-gray-400 text-sm mt-1">
-            Created by <strong>TAMAJIT SAHA</strong>
+            Created by <strong>ASMIT GOSWAMI</strong>
           </p>
+
           <div className="mt-4">
             <Link
               href="/"
@@ -42,14 +43,9 @@ export default function ChessPageClient() {
               ← Back to Home
             </Link>
           </div>
-          <p className="text-gray-400 text-sm mt-4 italic">
-            Check. Mate. Repeat.
-          </p>
         </header>
 
-        <div className="mt-8">
-          <ChessBoard />
-        </div>
+        <SnakeBoard />
 
         <footer className="mt-20 w-full text-center text-sm text-gray-500 border-t border-slate-800 py-6">
           <p>
