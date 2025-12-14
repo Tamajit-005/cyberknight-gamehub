@@ -45,7 +45,7 @@ export default function HomePage() {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
           variants={containerVariants}
         >
-          {/* Card 1: Tic Tac Toe */}
+          {/* Tic Tac Toe */}
           <motion.a
             href="/games/tictactoe"
             className="p-6 rounded-2xl bg-slate-800 hover:bg-slate-700 transition transform hover:scale-105 shadow-lg block"
@@ -57,7 +57,7 @@ export default function HomePage() {
             <p className="text-gray-400 text-sm">Challenge AI or a friend.</p>
           </motion.a>
 
-          {/* Card 2: Flappy Bird */}
+          {/* Flappy Bird */}
           <motion.a
             href="/games/flappybird"
             className="p-6 rounded-2xl bg-slate-800 hover:bg-slate-700 transition transform hover:scale-105 shadow-lg block"
@@ -69,7 +69,7 @@ export default function HomePage() {
             <p className="text-gray-400 text-sm">Flap through obstacles.</p>
           </motion.a>
 
-          {/* Card 3: Chess */}
+          {/* Chess */}
           <motion.a
             href="/games/chess"
             className="p-6 rounded-2xl bg-slate-800 hover:bg-slate-700 transition transform hover:scale-105 shadow-lg block"
@@ -79,7 +79,7 @@ export default function HomePage() {
             <p className="text-gray-400 text-sm">One move. One fate.</p>
           </motion.a>
 
-          {/* Card 4: Pac-Man */}
+          {/* Pac-Man */}
           <motion.a
             href="/games/pacman"
             className="p-6 rounded-2xl bg-slate-800 hover:bg-slate-700 transition transform hover:scale-105 shadow-lg block"
@@ -91,7 +91,7 @@ export default function HomePage() {
             <p className="text-gray-400 text-sm">Eat. Run. Repeat.</p>
           </motion.a>
 
-          {/* Card 5: Viper Loop (Snake) */}
+          {/* Viper Loop (Snake) */}
           <motion.a
             href="/games/snake"
             className="p-6 rounded-2xl bg-slate-800 hover:bg-slate-700 transition transform hover:scale-105 shadow-lg block"
@@ -102,9 +102,29 @@ export default function HomePage() {
             </h2>
             <p className="text-gray-400 text-sm">Don’t bite yourself.</p>
           </motion.a>
+
+          {/* Sudoku */}
+          <motion.a
+            href="/games/sudoku"
+            className="p-6 rounded-2xl bg-slate-800 hover:bg-slate-700 transition transform hover:scale-105 shadow-lg block"
+            variants={itemVariants}
+          >
+            <h2 className="text-xl font-semibold mb-2 text-blue-400">Sudoku</h2>
+            <p className="text-gray-400 text-sm">Logic. Patience. Precision.</p>
+          </motion.a>
+
+          {/* Wordle */}
+          <motion.a
+            href="/games/wordle"
+            className="p-6 rounded-2xl bg-slate-800 hover:bg-slate-700 transition transform hover:scale-105 shadow-lg block"
+            variants={itemVariants}
+          >
+            <h2 className="text-xl font-semibold mb-2 text-rose-400">Wordle</h2>
+            <p className="text-gray-400 text-sm">Guess smart. Six tries.</p>
+          </motion.a>
         </motion.div>
 
-        {/* Footer - Fades in */}
+        {/* Footer */}
         <motion.footer
           className="mt-20 w-full text-center text-sm text-gray-500 border-t border-slate-800 py-6"
           variants={itemVariants}
