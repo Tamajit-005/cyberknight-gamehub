@@ -39,6 +39,18 @@ export default function HomePage() {
           </a>
 
           <a
+            href="/games/wardel"
+            className="p-6 rounded-2xl bg-slate-800 hover:bg-slate-700 transition transform hover:scale-105 shadow-lg"
+          >
+            <h2 className="text-xl font-semibold mb-2 text-purple-400">
+              Wordle
+            </h2>
+            <p className="text-gray-400 text-sm">
+              Guess the 5-letter word.
+            </p>
+          </a>
+          
+          <a
             href="/games/pacman"
             className="p-6 rounded-2xl bg-slate-800 hover:bg-slate-700 transition transform hover:scale-105 shadow-lg"
           >
