@@ -10,7 +10,9 @@ export function initTicTacToe(): void {
 
   let board: Board = Array(9).fill(null);
   let current: Exclude<Player, "T"> = "X";
+
   let vsAI = true;
+  let aiStarts = false;
 
   const scores: Record<Player, number> = { X: 0, O: 0, T: 0 };
 
@@ -18,7 +20,7 @@ export function initTicTacToe(): void {
   const scoreO = document.getElementById("scoreO")!;
   const scoreT = document.getElementById("scoreT")!;
 
-  // Build board dynamically
+  // Build board
   boardEl.innerHTML = "";
   for (let i = 0; i < 9; i++) {
     const cell = document.createElement("button");
@@ -28,8 +30,18 @@ export function initTicTacToe(): void {
     boardEl.appendChild(cell);
   }
 
+  // MODE HANDLING (from old code)
   modeEl.addEventListener("change", () => {
-    vsAI = modeEl.value === "ai";
+    const v = modeEl.value;
+
+    if (v === "human-human") {
+      vsAI = false;
+      aiStarts = false;
+    } else {
+      vsAI = true;
+      aiStarts = v === "ai-ai-first";
+    }
+
     reset(true);
   });
 
@@ -39,8 +51,18 @@ export function initTicTacToe(): void {
     board = Array(9).fill(null);
     current = "X";
     updateUI();
-    setStatus(`${current} to move${vsAI ? " (vs AI)" : ""}`);
+    setStatus(`Turn: ${current}${vsAI ? " (vs AI)" : ""}`);
+
     if (!keepScores) updateScores();
+
+    // AI starts as X
+    if (vsAI && aiStarts && current === "X") {
+      const move = bestMove("X");
+      if (move !== -1) {
+        place(move, "X");
+        checkGameEnd();
+      }
+    }
   }
 
   function setStatus(msg: string): void {
@@ -58,11 +80,17 @@ export function initTicTacToe(): void {
     cells.forEach((cell, idx) => {
       const mark = board[idx];
       cell.textContent = mark ?? "";
-      cell.classList.remove("text-cyan-400", "text-pink-400", "ring-2", "ring-green-500", "opacity-50");
+      cell.classList.remove(
+        "text-cyan-400",
+        "text-pink-400",
+        "ring-2",
+        "ring-green-500",
+        "opacity-50"
+      );
 
       if (mark === "X") cell.classList.add("text-cyan-400");
       if (mark === "O") cell.classList.add("text-pink-400");
-      if (gameOver(board) || !!mark) cell.classList.add("opacity-50");
+      if (gameOver(board) || mark) cell.classList.add("opacity-50");
 
       if (winnerLine?.includes(idx)) {
         cell.classList.add("ring-2", "ring-green-500");
@@ -72,14 +100,16 @@ export function initTicTacToe(): void {
 
   function onCell(i: number): void {
     if (board[i] || gameOver(board)) return;
+
     place(i, current);
     const result = checkGameEnd();
     if (result.done) return;
 
-    if (vsAI && current === "O") {
-      const move = bestMove("O");
+    // AI move (X or O depending on who starts)
+    if (vsAI && current === (aiStarts ? "X" : "O")) {
+      const move = bestMove(current);
       if (move !== -1) {
-        place(move, "O");
+        place(move, current);
         checkGameEnd();
       }
     }
@@ -95,21 +125,22 @@ export function initTicTacToe(): void {
     const w = winner(board);
     if (w) {
       const winLine = winningLine(board);
-      setStatus(`${w} wins! Click Reset for a new round.`);
+      setStatus(`${w} wins!`);
       scores[w]++;
       updateUI(winLine);
       updateScores();
       return { done: true };
-    } else if (full(board)) {
-      setStatus(`It's a tie. Click Reset for a new round.`);
+    }
+
+    if (full(board)) {
+      setStatus("It's a tie.");
       scores.T++;
-      updateUI();
       updateScores();
       return { done: true };
-    } else {
-      setStatus(`Turn: ${current}${vsAI ? (current === "O" ? " (AI thinking...)" : " (vs AI)") : ""}`);
-      return { done: false };
     }
+
+    setStatus(`Turn: ${current}`);
+    return { done: false };
   }
 
   const lines: number[][] = [
@@ -131,9 +162,8 @@ export function initTicTacToe(): void {
   }
 
   function winningLine(b: Board): number[] | null {
-    for (const line of lines) {
-      const [a, c, d] = line;
-      if (b[a] && b[a] === b[c] && b[a] === b[d]) return line;
+    for (const [a, c, d] of lines) {
+      if (b[a] && b[a] === b[c] && b[a] === b[d]) return [a, c, d];
     }
     return null;
   }
@@ -146,10 +176,10 @@ export function initTicTacToe(): void {
     return !!winner(b) || full(b);
   }
 
-  // Minimax AI logic
-  function bestMove(ai: Exclude<Player, "T"> = "O"): number {
+  function bestMove(ai: Exclude<Player, "T">): number {
     let bestScore = -Infinity;
     let move = -1;
+
     for (let i = 0; i < 9; i++) {
       if (!board[i]) {
         board[i] = ai;
@@ -164,14 +194,20 @@ export function initTicTacToe(): void {
     return move;
   }
 
-  function minimax(b: Board, depth: number, isMaximizing: boolean, ai: Exclude<Player, "T">): number {
+  function minimax(
+    b: Board,
+    depth: number,
+    isMax: boolean,
+    ai: Exclude<Player, "T">
+  ): number {
     const w = winner(b);
     if (w === ai) return 10 - depth;
     if (w && w !== ai) return depth - 10;
     if (full(b)) return 0;
 
     const human: Exclude<Player, "T"> = ai === "X" ? "O" : "X";
-    if (isMaximizing) {
+
+    if (isMax) {
       let best = -Infinity;
       for (let i = 0; i < 9; i++) {
         if (!b[i]) {
